@@ -143,11 +143,12 @@ def animeList(username):
     variables = create_vars(username)
     response = requests.post(url, json={'query':query, 'variables':variables})
     response = response.json()    # Turn json into hash table
+    stdListTypes = {"Watching", "Rewatching", "Completed", "Paused", "Dropped", "Planning"}
 
     data = response.get('data')
     anime = data['anime']
     lists = anime.get('lists')
-    for listType in lists:        # COMPLETED, PLANNING, etc.
+    for listType in lists:        # Ex. Completed, Planning, etc. & Custom Lists
         for entries in listType['entries']:
             media = entries['media']
             titles = media['title']
@@ -171,23 +172,29 @@ def animeList(username):
             endMonth = entries['completedAt']['month']
             endDay = entries['completedAt']['day']
             notes = entries['notes']
+            if listType['name'] in stdListTypes:
+                customList = None
+            else:
+                customList = listType['name']
+                # Does not account for Anime in more than one custom list
             anilist[title] = Anime(title, genres, format, animeStatus, 
                                    episodeCount, countryOfOrigin, userStatus, 
                                    score, progress, repeats, startYear, 
                                    startMonth, startDay, endYear, endMonth, 
-                                   endDay, notes)
+                                   endDay, notes, customList)
     return anilist
 
 def mangaList(username):
     '''Returns a hash table of a user's manga list. The anime's
     title, genres, format, animeStatus, chapterCount, volumecount,
-    countryOfOrigin, userStatus, and score are stored as the value, with the anime's
-    title stored as the key
+    countryOfOrigin, userStatus, and score are stored as the value, with the
+    anime's title stored as the key
     '''
     mangalist = {}
     variables = create_vars(username)
     response = requests.post(url, json={'query':query, 'variables':variables})
     response = response.json()    # Turn json into hash table
+    stdListTypes = {"Reading", "Rereading", "Completed", "Paused", "Dropped", "Planning"}
 
     data = response['data']
     manga = data['manga']
@@ -218,12 +225,17 @@ def mangaList(username):
             endMonth = entries['completedAt']['month']
             endDay = entries['completedAt']['day']
             notes = entries['notes']
+            if listType['name'] in stdListTypes:
+                customList = None
+            else:
+                customList = listType['name']
+                # Does not account for manga in more than one custom list
             mangalist[title] = Manga(title, genres, format, mangaStatus, 
                                      chapterCount, volumeCount, 
                                      countryOfOrigin, userStatus, score, 
                                      progress, progressVolumes, repeats, 
                                      startYear, startMonth, startDay, endYear, 
-                                     endMonth, endDay, notes)
+                                     endMonth, endDay, notes, customList)
     return mangalist
 
 def create_user(username, animeList, mangaList):
@@ -321,6 +333,7 @@ def main(username):
             file.write("\tRewatches: " + str(anime.repeats) + "\n")
             file.write("\t" + str(anime.startDate) + " - " + str(anime.endDate) + "\n")
             file.write("\tNotes: " + str(anime.notes) + "\n")
+            file.write("\tCustom List: " + str(anime.customList) + "\n")
     with open("D:\\Wesley\\CS-Projects\\AniList_Bot\\" + username + "'s Manga List.txt", "w", encoding='utf-8') as file:
         file.write("Total manga count: " + str(len(user.mangaList)) + "\n")
         file.write("Total manga excluding planned: " + str(user.mangaCount) + "\n\n")
@@ -333,5 +346,6 @@ def main(username):
             file.write("\tRereads: " + str(manga.repeats) + "\n")
             file.write("\t" + str(manga.startDate) + " - " + str(manga.endDate) + "\n")
             file.write("\tNotes: " + str(manga.notes) + "\n")
+            file.write("\tCustom List: " + str(manga.customList) + "\n")
 
 main("Wes")
