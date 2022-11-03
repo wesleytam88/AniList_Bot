@@ -1,7 +1,8 @@
 class Anime:
     def __init__(self, title, genres, format, animeStatus, episodeCount, 
-                 countryOfOrigin, userStatus, score, progress, repeats, startYear, 
-                 startMonth, startDay, endYear, endMonth, endDay, notes):
+                 countryOfOrigin, userStatus, score, progress, repeats, 
+                 startYear, startMonth, startDay, endYear, endMonth, endDay,
+                 notes, customList):
         self.title = title
         self.genres = genres
         self.format = format
@@ -23,6 +24,7 @@ class Anime:
         else:
             self.endDate = str(endMonth) + "/" + str(endDay) + "/" + str(endYear)
         self.notes = notes
+        self.customList = customList
 
     def __repr__(self):
         return str(self.title)
