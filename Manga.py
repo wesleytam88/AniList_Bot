@@ -3,8 +3,9 @@ from email.errors import StartBoundaryNotFoundDefect
 
 class Manga:
     def __init__(self, title, genres, format, mangaStatus, chapterCount, 
-                 volumeCount, countryOfOrigin, userStatus, score, progress, progressVolumes, repeats, 
-                 startYear, startMonth, startDay, endYear, endMonth, endDay, notes):
+                 volumeCount, countryOfOrigin, userStatus, score, progress, 
+                 progressVolumes, repeats, startYear, startMonth, startDay, 
+                 endYear, endMonth, endDay, notes, customList):
         self.title = title
         self.genres = genres
         self.format = format
@@ -28,6 +29,7 @@ class Manga:
         else:
             self.endDate = str(endMonth) + "/" + str(endDay) + "/" + str(endYear)
         self.notes = notes
+        self.customList = customList
 
     def __repr__(self):
         return str(self.title)
