@@ -50,17 +50,28 @@ class OrderedList:
 
     def remove(self, item):
         '''Removes the first occurrence of an item from OrderedList. If item is removed (was in the list) 
-           returns True.  If item was not removed (was not in the list) returns False
+           returns the item.  If item was not removed (was not in the list) returns None
            MUST have O(n) average-case performance'''
         if not self.search(item):
-            return False
+            return None
         current = self.head.next
         while current.item != item:
             current = current.next
         current.prev.next = current.next
         current.next.prev = current.prev
         self.length -= 1
-        return True
+        return current.item
+
+
+    def get_item(self, indx):
+        '''Returns the item at index indx'''
+        current = self.head.next
+        if indx >= self.size():
+            raise IndexError
+        for i in range(0, indx):
+            current = current.next
+            i += 1
+        return current.item
 
 
     def index(self, item):
@@ -130,3 +141,9 @@ class OrderedList:
         revList = self.python_list()
         revList.reverse()
         return revList
+
+    def clear(self):
+        '''Clears the ordered list of all nodes except for dummy node'''
+        while self.length > 0:
+            self.pop(0)
+        return True
