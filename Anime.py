@@ -33,5 +33,5 @@ class Anime:
         if type(other) != type(self):
             raise TypeError
         if other.score == self.score:
-            return self.title < other.title
+            return self.title.lower < other.title.lower
         return other.score < self.score
