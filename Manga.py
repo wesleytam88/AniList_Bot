@@ -1,11 +1,10 @@
-from email.errors import StartBoundaryNotFoundDefect
-
-
 class Manga:
-    def __init__(self, title, genres, format, mangaStatus, chapterCount, 
-                 volumeCount, countryOfOrigin, userStatus, score, progress, 
-                 progressVolumes, repeats, startYear, startMonth, startDay, 
-                 endYear, endMonth, endDay, notes, customList):
+    def __init__(self, idAni, idMal, title, genres, format, mangaStatus, 
+                 chapterCount, volumeCount, countryOfOrigin, userStatus, score, 
+                 progress, progressVolumes, repeats, startYear, startMonth, 
+                 startDay, endYear, endMonth, endDay, notes, customList):
+        self.idAni = idAni
+        self.idMal = idMal
         self.title = title
         self.genres = genres
         self.format = format
@@ -35,6 +34,7 @@ class Manga:
         return str(self.title)
 
     def __lt__(self, other):
+        # Default sort by score, then alphabetical
         if type(other) != type(self):
             raise TypeError
         if self.score == other.score:
