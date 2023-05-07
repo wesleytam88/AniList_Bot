@@ -1,8 +1,10 @@
 class Anime:
-    def __init__(self, title, genres, format, animeStatus, episodeCount, 
-                 countryOfOrigin, userStatus, score, progress, repeats, 
-                 startYear, startMonth, startDay, endYear, endMonth, endDay,
-                 notes, customList):
+    def __init__(self, idAni, idMal, title, genres, format, animeStatus, 
+                 episodeCount, countryOfOrigin, userStatus, score, progress, 
+                 repeats, startYear, startMonth, startDay, endYear, endMonth, 
+                 endDay, notes, customList):
+        self.idAni = idAni
+        self.idMal = idMal
         self.title = title
         self.genres = genres
         self.format = format
@@ -30,6 +32,7 @@ class Anime:
         return str(self.title)
 
     def __lt__(self, other):
+        # Default sort by score, then alphabetical
         if type(other) != type(self):
             raise TypeError
         if other.score == self.score:
