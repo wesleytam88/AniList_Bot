@@ -67,6 +67,8 @@ query ($name: String) {            # Define variables to be used in query (id)
             name
             entries {
                 media {
+                    id
+                    idMal
                     title {
                         english
                         romaji
@@ -100,6 +102,8 @@ query ($name: String) {            # Define variables to be used in query (id)
             name
             entries {
                 media {
+                    id
+                    idMal
                     title {
                         english
                         romaji
@@ -151,6 +155,8 @@ def animeList(username):
     for listType in lists:        # Ex. Completed, Planning, etc. & Custom Lists
         for entries in listType['entries']:
             media = entries['media']
+            idAni = media['id']
+            idMal = media['idMal']
             titles = media['title']
             if titles['english'] != None:
                 title = titles['english']
@@ -177,11 +183,11 @@ def animeList(username):
             else:
                 customList = listType['name']
                 # Does not account for Anime in more than one custom list
-            anilist[title] = Anime(title, genres, format, animeStatus, 
-                                   episodeCount, countryOfOrigin, userStatus, 
-                                   score, progress, repeats, startYear, 
-                                   startMonth, startDay, endYear, endMonth, 
-                                   endDay, notes, customList)
+            anilist[title] = Anime(idAni, idMal, title, genres, format, 
+                                   animeStatus, episodeCount, countryOfOrigin, 
+                                   userStatus, score, progress, repeats, 
+                                   startYear, startMonth, startDay, endYear, 
+                                   endMonth, endDay, notes, customList)
     return anilist
 
 def mangaList(username):
@@ -202,6 +208,8 @@ def mangaList(username):
     for listType in lists:
         for entries in listType['entries']:
             media = entries['media']
+            idAni = media['id']
+            idMal = media['idMal']
             titles = media['title']
             if titles['english'] != None:
                 title = titles['english']
@@ -230,8 +238,8 @@ def mangaList(username):
             else:
                 customList = listType['name']
                 # Does not account for manga in more than one custom list
-            mangalist[title] = Manga(title, genres, format, mangaStatus, 
-                                     chapterCount, volumeCount, 
+            mangalist[title] = Manga(idAni, idMal, title, genres, format, 
+                                     mangaStatus, chapterCount, volumeCount, 
                                      countryOfOrigin, userStatus, score, 
                                      progress, progressVolumes, repeats, 
                                      startYear, startMonth, startDay, endYear, 
@@ -326,26 +334,31 @@ def main(username):
         file.write("Total anime count: " + str(len(user.animeList)) + "\n")
         file.write("Total anime excluding planned: " + str(user.animeCount) + "\n\n")
         for anime in sort_by_title(user.animeList):
-            file.write(anime.title + ":\n")
-            file.write("\t" + str(anime.userStatus) + "\n")
-            file.write("\tEpisode Progress: " + str(anime.progress) + "/" + str(anime.episodeCount) + "\n")
-            file.write("\tScore: " + str(anime.score) + "\n")
-            file.write("\tRewatches: " + str(anime.repeats) + "\n")
-            file.write("\t" + str(anime.startDate) + " - " + str(anime.endDate) + "\n")
-            file.write("\tNotes: " + str(anime.notes) + "\n")
-            file.write("\tCustom List: " + str(anime.customList) + "\n")
+            file.write(f"{anime.title}:\n")
+            file.write(f"\tAniList ID: {str(anime.idAni)}\n")
+            file.write(f"\tMAL ID: {str(anime.idMal)}\n")
+            file.write(f"\t{str(anime.userStatus)}\n")
+            file.write(f"\tEpisode Progress: {str(anime.progress)}/{str(anime.episodeCount)}\n")
+            file.write(f"\tScore: {str(anime.score)}\n")
+            file.write(f"\tRewatches: {str(anime.repeats)}\n")
+            file.write(f"\t{str(anime.startDate)} - {str(anime.endDate)}\n")
+            file.write(f"\tNotes: {str(anime.notes)}\n")
+            file.write(f"\tCustom List: {str(anime.customList)}\n")
+
     with open("D:\\Wesley\\CS-Projects\\AniList_Bot\\" + username + "'s Manga List.txt", "w", encoding='utf-8') as file:
         file.write("Total manga count: " + str(len(user.mangaList)) + "\n")
         file.write("Total manga excluding planned: " + str(user.mangaCount) + "\n\n")
         for manga in sort_by_title(user.mangaList):
-            file.write(manga.title + ":\n")
-            file.write("\t" + str(manga.userStatus) + "\n")
-            file.write("\tChapter Progress: " + str(manga.progress) + "/" + str(manga.chapterCount) + "\n")
-            file.write("\tVolume Progress: " + str(manga.progressVolumes) + "/" + str(manga.volumeCount) + "\n")
-            file.write("\tScore: " + str(manga.score) + "\n")
-            file.write("\tRereads: " + str(manga.repeats) + "\n")
-            file.write("\t" + str(manga.startDate) + " - " + str(manga.endDate) + "\n")
-            file.write("\tNotes: " + str(manga.notes) + "\n")
-            file.write("\tCustom List: " + str(manga.customList) + "\n")
+            file.write(f"{manga.title}:\n")
+            file.write(f"\tAniList ID: {str(manga.idAni)}\n")
+            file.write(f"\tMAL ID: {str(manga.idMal)}\n")
+            file.write(f"\t{str(manga.userStatus)}\n")
+            file.write(f"\tChapter Progress: {str(manga.progress)}/{str(manga.chapterCount)}\n")
+            file.write(f"\tVolume Progress: {str(manga.progressVolumes)}/{str(manga.volumeCount)}\n")
+            file.write(f"\tScore: {str(manga.score)}\n")
+            file.write(f"\tRereads: {str(manga.repeats)}\n")
+            file.write(f"\t{str(manga.startDate)} - {str(manga.endDate)}\n")
+            file.write(f"\tNotes: {str(manga.notes)}\n")
+            file.write(f"\tCustom List: {str(manga.customList)}\n")
 
 main("Wes")
