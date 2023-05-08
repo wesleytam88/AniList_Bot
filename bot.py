@@ -326,17 +326,16 @@ def sort_by_title(dict):
     return sortedList
 
 def main(username):
-    # username = 'Wes'
     animelist = animeList(username)
     mangalist = mangaList(username)
     user = create_user(username, animelist, mangalist)
-    with open("D:\\Wesley\\CS-Projects\\AniList_Bot\\" + username + "'s Anime List.txt", "w", encoding='utf-8') as file:
+
+    with open(username + "'s Anime List.txt", "w", encoding='utf-8') as file:
         file.write("Total anime count: " + str(len(user.animeList)) + "\n")
         file.write("Total anime excluding planned: " + str(user.animeCount) + "\n\n")
         for anime in sort_by_title(user.animeList):
             file.write(f"{anime.title}:\n")
-            file.write(f"\tAniList ID: {str(anime.idAni)}\n")
-            file.write(f"\tMAL ID: {str(anime.idMal)}\n")
+            file.write(f"\tAniList ID: {str(anime.idAni)}, MAL ID: {str(anime.idMal)}\n")
             file.write(f"\t{str(anime.userStatus)}\n")
             file.write(f"\tEpisode Progress: {str(anime.progress)}/{str(anime.episodeCount)}\n")
             file.write(f"\tScore: {str(anime.score)}\n")
@@ -345,13 +344,12 @@ def main(username):
             file.write(f"\tNotes: {str(anime.notes)}\n")
             file.write(f"\tCustom List: {str(anime.customList)}\n")
 
-    with open("D:\\Wesley\\CS-Projects\\AniList_Bot\\" + username + "'s Manga List.txt", "w", encoding='utf-8') as file:
+    with open(username + "'s Manga List.txt", "w", encoding='utf-8') as file:
         file.write("Total manga count: " + str(len(user.mangaList)) + "\n")
         file.write("Total manga excluding planned: " + str(user.mangaCount) + "\n\n")
         for manga in sort_by_title(user.mangaList):
             file.write(f"{manga.title}:\n")
-            file.write(f"\tAniList ID: {str(manga.idAni)}\n")
-            file.write(f"\tMAL ID: {str(manga.idMal)}\n")
+            file.write(f"\tAniList ID: {str(manga.idAni)}, MAL ID: {str(manga.idMal)}\n")
             file.write(f"\t{str(manga.userStatus)}\n")
             file.write(f"\tChapter Progress: {str(manga.progress)}/{str(manga.chapterCount)}\n")
             file.write(f"\tVolume Progress: {str(manga.progressVolumes)}/{str(manga.volumeCount)}\n")
@@ -361,4 +359,5 @@ def main(username):
             file.write(f"\tNotes: {str(manga.notes)}\n")
             file.write(f"\tCustom List: {str(manga.customList)}\n")
 
-main("Wes")
+if __name__ == '__main__': 
+    main("Wes")
