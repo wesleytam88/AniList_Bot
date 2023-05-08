@@ -330,34 +330,35 @@ def main(username):
     mangalist = mangaList(username)
     user = create_user(username, animelist, mangalist)
 
-    with open(username + "'s Anime List.txt", "w", encoding='utf-8') as file:
-        file.write("Total anime count: " + str(len(user.animeList)) + "\n")
-        file.write("Total anime excluding planned: " + str(user.animeCount) + "\n\n")
+    with open(f"{username}'s Anime List.txt", "w", encoding='utf-8') as file:
+        file.write(f"Total anime count: {len(user.animeList)}\n")
+        file.write(f"Total anime excluding planned: {user.animeCount}\n\n")
         for anime in sort_by_title(user.animeList):
             file.write(f"{anime.title}:\n")
-            file.write(f"\tAniList ID: {str(anime.idAni)}, MAL ID: {str(anime.idMal)}\n")
-            file.write(f"\t{str(anime.userStatus)}\n")
-            file.write(f"\tEpisode Progress: {str(anime.progress)}/{str(anime.episodeCount)}\n")
-            file.write(f"\tScore: {str(anime.score)}\n")
-            file.write(f"\tRewatches: {str(anime.repeats)}\n")
-            file.write(f"\t{str(anime.startDate)} - {str(anime.endDate)}\n")
-            file.write(f"\tNotes: {str(anime.notes)}\n")
-            file.write(f"\tCustom List: {str(anime.customList)}\n")
+            file.write(f"\tAniList ID: {anime.idAni}, MAL ID: {anime.idMal}\n")
+            file.write(f"\t{anime.userStatus}\n")
+            file.write(f"\tEpisode Progress: {anime.progress}/{anime.episodeCount}\n")
+            file.write(f"\tScore: {anime.score}\n")
+            file.write(f"\tRewatches: {anime.repeats}\n")
+            file.write(f"\t{anime.startDate} - {anime.endDate}\n")
+            file.write(f"\tNotes: {anime.notes}\n")
+            file.write(f"\tCustom List: {anime.customList}\n")
 
-    with open(username + "'s Manga List.txt", "w", encoding='utf-8') as file:
-        file.write("Total manga count: " + str(len(user.mangaList)) + "\n")
-        file.write("Total manga excluding planned: " + str(user.mangaCount) + "\n\n")
+    with open(f"{username}'s Manga List.txt", "w", encoding='utf-8') as file:
+        file.write(f"Total manga count: {len(user.mangaList)}\n")
+        file.write(f"Total manga excluding planned: {user.mangaCount}\n\n")
         for manga in sort_by_title(user.mangaList):
             file.write(f"{manga.title}:\n")
-            file.write(f"\tAniList ID: {str(manga.idAni)}, MAL ID: {str(manga.idMal)}\n")
-            file.write(f"\t{str(manga.userStatus)}\n")
-            file.write(f"\tChapter Progress: {str(manga.progress)}/{str(manga.chapterCount)}\n")
-            file.write(f"\tVolume Progress: {str(manga.progressVolumes)}/{str(manga.volumeCount)}\n")
-            file.write(f"\tScore: {str(manga.score)}\n")
-            file.write(f"\tRereads: {str(manga.repeats)}\n")
-            file.write(f"\t{str(manga.startDate)} - {str(manga.endDate)}\n")
-            file.write(f"\tNotes: {str(manga.notes)}\n")
-            file.write(f"\tCustom List: {str(manga.customList)}\n")
+            file.write(f"\tAniList ID: {manga.idAni}, MAL ID: {manga.idMal}\n")
+            file.write(f"\t{manga.userStatus}\n")
+            file.write(f"\tChapter Progress: {manga.progress}/{manga.chapterCount}\n")
+            file.write(f"\tVolume Progress: {manga.progressVolumes}/{manga.volumeCount}\n")
+            file.write(f"\tScore: {manga.score}\n")
+            file.write(f"\tRereads: {manga.repeats}\n")
+            file.write(f"\t{manga.startDate} - {manga.endDate}\n")
+            file.write(f"\tNotes: {manga.notes}\n")
+            file.write(f"\tCustom List: {manga.customList}\n")
 
-if __name__ == '__main__': 
-    main("Wes")
+if __name__ == '__main__':
+    username = "Wes"
+    main(username)
