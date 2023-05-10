@@ -330,7 +330,7 @@ def main(username):
     mangalist = mangaList(username)
     user = create_user(username, animelist, mangalist)
 
-    with open(f"{username}'s Anime List.txt", "w", encoding='utf-8') as file:
+    with open(f"./{username}'s Anime List.txt", "w", encoding='utf-8') as file:
         file.write(f"Total anime count: {len(user.animeList)}\n")
         file.write(f"Total anime excluding planned: {user.animeCount}\n\n")
         for anime in sort_by_title(user.animeList):
@@ -344,7 +344,7 @@ def main(username):
             file.write(f"\tNotes: {anime.notes}\n")
             file.write(f"\tCustom List: {anime.customList}\n")
 
-    with open(f"{username}'s Manga List.txt", "w", encoding='utf-8') as file:
+    with open(f"./{username}'s Manga List.txt", "w", encoding='utf-8') as file:
         file.write(f"Total manga count: {len(user.mangaList)}\n")
         file.write(f"Total manga excluding planned: {user.mangaCount}\n\n")
         for manga in sort_by_title(user.mangaList):
