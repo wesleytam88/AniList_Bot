@@ -7,6 +7,7 @@ from Tag import *
 from ordered_list_iterative import *
 
 # https://anilist.github.io/ApiV2-GraphQL-Docs/
+# https://anilist.co/graphiql
 url = 'https://graphql.anilist.co'
 
 def create_vars(username):
@@ -360,5 +361,5 @@ def main(username):
             file.write(f"\tCustom List: {manga.customList}\n")
 
 if __name__ == '__main__':
-    username = "Wes"
+    username = input("AniList Username: ")
     main(username)
