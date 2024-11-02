@@ -8,11 +8,11 @@ from OrderedList import *
 
 # https://anilist.github.io/ApiV2-GraphQL-Docs/
 # https://anilist.co/graphiql
-url = 'https://graphql.anilist.co'
-stdListTypes = {"Watching", "Rewatching", "Completed", "Paused", "Dropped", "Planning"}
+URL = 'https://graphql.anilist.co'
+STDLISTS = {"Watching", "Rewatching", "Completed", "Paused", "Dropped", "Planning"}
 
 def create_vars(username):
-    # Define our query variables and values that will be used in the query request
+    # Define our query variables and values that will be used in query request
     variables = {
         'name': username
     }
@@ -139,56 +139,69 @@ query ($name: String) {            # Define variables to be used in query (id)
 }
 ''' 
 
-def animeList(username: str):
+def animeList(username: str) -> dict[int, Anime]:
     '''Returns a hash table of a user's anime list. The anime's
     title, genres, format, animeStatus, episodeCount, countryOfOrigin,
     userStatus, and score are stored as the value, with the anime's
     title stored as the key
     '''
-    animelist: dict[str: Anime] = {}
-    variables = create_vars(username)
-    response = requests.post(url, json={'query':query, 'variables':variables})
+    animelist: dict[int: Anime] = {}
+    variables: dict[str: str] = create_vars(username)
+    response = requests.post(URL, json={'query':query, 'variables':variables})
     response = response.json()    # Turn json into hash table
 
-    data = response.get('data')
+    data = response['data']
     anime = data['anime']
-    lists = anime.get('lists')
-    for listType in lists:        # Ex. Completed, Planning, etc. & Custom Lists
+    lists = anime['lists']
+    for listType in lists:        # Ex. Regular (ex. Completed) & Custom Lists
         for entries in listType['entries']:
-            media = entries['media']
-            idAni = media['id']
-            idMal = media['idMal']
-            titles = media['title']
+            media: dict = entries['media']
+            idAni: int = media['id']
+            idMal: int = media['idMal']
+
+            # Check if Anime already in hash table
+            if idAni in animelist:
+                # Already encountered, must be in a custom list
+                # Update custom list then continue to next Anime
+                if listType['name'] not in STDLISTS:
+                    animelist[idAni].customList.append(listType['name'])
+                continue
+
+            # Parse the data
+            titles: dict[str: str] = media['title']
             if titles['english'] != None:
-                title = titles['english']
+                title: str = titles['english']
             else:
-                title = titles['romaji']
-            genres = media['genres']
-            format = media['format']
-            animeStatus = media['status']
-            episodeCount = media['episodes']
-            countryOfOrigin = media['countryOfOrigin']
-            userStatus = entries['status']
+                title: str = titles['romaji']
+            genres: list[str] = media['genres']
+            format: str = media['format']
+            animeStatus: str = media['status']
+            episodeCount: int = media['episodes']
+            countryOfOrigin: str = media['countryOfOrigin']
+            userStatus: str = entries['status']
             score = entries['score']
-            progress = entries['progress']
-            repeats = entries['repeat']
-            startYear = entries['startedAt']['year']
-            startMonth = entries['startedAt']['month']
-            startDay = entries['startedAt']['day']
-            endYear = entries['completedAt']['year']
-            endMonth = entries['completedAt']['month']
-            endDay = entries['completedAt']['day']
-            notes = entries['notes']
-            if listType['name'] in stdListTypes:
-                customList = None
+            progress: int = entries['progress']
+            repeats: int = entries['repeat']
+            startYear: int = entries['startedAt']['year']
+            startMonth: int = entries['startedAt']['month']
+            startDay: int = entries['startedAt']['day']
+            endYear: int = entries['completedAt']['year']
+            endMonth: int = entries['completedAt']['month']
+            endDay: int = entries['completedAt']['day']
+            notes: str = entries['notes']
+            if listType['name'] in STDLISTS:
+                customList = []
             else:
-                customList = listType['name']
+                customList = [listType['name']]
                 # Does not account for Anime in more than one custom list
-            animelist[title] = Anime(idAni, idMal, title, genres, format, 
+
+            # Add the Anime to the hash table
+            animelist[idAni] = Anime(idAni, idMal, title, genres, format, 
                                      animeStatus, episodeCount, countryOfOrigin, 
                                      userStatus, score, progress, repeats, 
                                      startYear, startMonth, startDay, endYear, 
                                      endMonth, endDay, notes, customList)
+
     return animelist
 
 def mangaList(username):
@@ -199,7 +212,7 @@ def mangaList(username):
     '''
     mangalist = {}
     variables = create_vars(username)
-    response = requests.post(url, json={'query':query, 'variables':variables})
+    response = requests.post(URL, json={'query':query, 'variables':variables})
     response = response.json()    # Turn json into hash table
 
     data: dict[str: Manga] = response['data']
@@ -233,7 +246,7 @@ def mangaList(username):
             endMonth = entries['completedAt']['month']
             endDay = entries['completedAt']['day']
             notes = entries['notes']
-            if listType['name'] in stdListTypes:
+            if listType['name'] in STDLISTS:
                 customList = None
             else:
                 customList = listType['name']
@@ -249,7 +262,7 @@ def mangaList(username):
 def create_user(username, animeList, mangaList):
     '''Returns a User object'''
     variables = create_vars(username)
-    response = requests.post(url, json={'query':query, 'variables':variables})
+    response = requests.post(URL, json={'query':query, 'variables':variables})
     response = response.json()    # Turn json into hash table
 
     data = response['data']
@@ -309,21 +322,25 @@ def create_user(username, animeList, mangaList):
 
 def sort_by_score(dict):
     '''Takes in a dictionary of anime/manga,
-    returns a list of Anime/Manga sorted by scores'''
+       returns a list of Anime/Manga sorted by scores'''
     sorted = OrderedList()
     for media in dict.values():
         sorted.add(media)
     sortedList = sorted.python_list()
     return sortedList
 
-def sort_by_title(dict):
-    '''Takes in a dictionary of anime/manga,
-    returns a list of Anime/Manga sorted by titles'''
-    list = dict.keys()
-    sortedList = sorted(list)
-    for i in range(len(sortedList)):
-        sortedList[i] = dict[sortedList[i]]
-    return sortedList
+def sort_by_title(ht: dict) -> list:
+    '''Takes in a hash table of dict[int: Anime/Manga],
+       returns a list of Anime/Manga sorted by titles'''
+    titleIdList: list[(str, int)] = []
+    for media in ht.values():
+        titleIdList.append((media.title, media.idAni))
+    titleIdList.sort(key=lambda x: x[0])    # Sort by media title
+
+    ret = []
+    for tuple in titleIdList:
+        ret.append(ht[tuple[1]])
+    return ret
 
 def main(username):
     animelist = animeList(username)
