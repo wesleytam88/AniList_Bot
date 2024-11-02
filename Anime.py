@@ -3,35 +3,35 @@ class Anime:
                  episodeCount, countryOfOrigin, userStatus, score, progress, 
                  repeats, startYear, startMonth, startDay, endYear, endMonth, 
                  endDay, notes, customList):
-        self.idAni = idAni
-        self.idMal = idMal
-        self.title = title
-        self.genres = genres
-        self.format = format
-        self.animeStatus = animeStatus
-        self.episodeCount = episodeCount
-        self.countryOfOrigin = countryOfOrigin
-        self.userStatus = userStatus
+        self.idAni: int = idAni
+        self.idMal: int = idMal
+        self.title: str = title
+        self.genres: list[str] = genres
+        self.format: str = format
+        self.animeStatus: str = animeStatus
+        self.episodeCount: int = episodeCount
+        self.countryOfOrigin: str = countryOfOrigin
+        self.userStatus: str = userStatus
         self.score = score
-        self.progress = progress
-        self.repeats = repeats
+        self.progress: int = progress
+        self.repeats: int = repeats
 
-        # Start date formatting
+        # Start-date formatting
         self.startDate = None
         if startYear == None and startMonth == None and startDay == None:
             self.startDate = "No date"
         else:
-            self.startDate = str(startMonth) + "/" + str(startDay) + "/" + str(startYear)
+            self.startDate = f"{startMonth}/{startDay}/{startYear}"
 
-        # End date formatting
+        # End-date formatting
         self.endDate = None
         if endYear == None and endMonth == None and endDay == None:
             self.endDate = "No Date"
         else:
-            self.endDate = str(endMonth) + "/" + str(endDay) + "/" + str(endYear)
+            self.endDate = f"{endMonth}/{endDay}/{endYear}"
 
-        self.notes = notes
-        self.customList = customList
+        self.notes: str = notes
+        self.customList: list[str] = customList
 
     def __repr__(self):
         return str(self.title)
