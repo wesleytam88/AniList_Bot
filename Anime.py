@@ -15,16 +15,21 @@ class Anime:
         self.score = score
         self.progress = progress
         self.repeats = repeats
+
+        # Start date formatting
         self.startDate = None
         if startYear == None and startMonth == None and startDay == None:
             self.startDate = "No date"
         else:
             self.startDate = str(startMonth) + "/" + str(startDay) + "/" + str(startYear)
+
+        # End date formatting
         self.endDate = None
         if endYear == None and endMonth == None and endDay == None:
             self.endDate = "No Date"
         else:
             self.endDate = str(endMonth) + "/" + str(endDay) + "/" + str(endYear)
+
         self.notes = notes
         self.customList = customList
 
